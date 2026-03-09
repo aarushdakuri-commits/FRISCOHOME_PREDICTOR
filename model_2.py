@@ -8,6 +8,8 @@ Original file is located at
 """
 
 import pandas as pd
+import streamlit as st
+st.title("Frisco House Price Predictor")
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -64,10 +66,12 @@ print(f"R-squared Score: {r2:.4f}")
 
 # 7. Prediction Function for Users
 def predict_house_price(beds, baths, sqft, lot_size, year_built, zip_code):
-    # Create a template for the input
-    input_data = pd.DataFrame(columns=X.columns)
-    input_data.loc[0] = 0 # Initialize with zeros
+    # Initialize as float so we don't get the dtype error
+    input_data = pd.DataFrame(0.0, columns=X.columns, index=[0]) 
 
+    input_data.at[0, 'BEDS'] = float(beds)
+    input_data.at[0, 'BATHS'] = float(baths)
+    
     # Fill in the values
     input_data.at[0, 'BEDS'] = beds
     input_data.at[0, 'BATHS'] = baths
@@ -86,6 +90,17 @@ def predict_house_price(beds, baths, sqft, lot_size, year_built, zip_code):
     # Predict
     prediction = model.predict(input_data)[0]
     return prediction
+
+    # Create input widgets
+    beds = st.number_input("Beds", min_value=1, value=4)
+    baths = st.number_input("Baths", min_value=1, value=3)
+    sqft = st.number_input("Square Feet", min_value=500, value=2500)
+    # ... add other inputs ...
+
+    if st.button("Predict Price"):
+        price = predict_house_price(beds, baths, sqft, ...)
+        st.success(f"The estimated price is: ${price:,.2f}")
+
 
 # Example Usage:
 example_price = predict_house_price(beds=5, baths=5.5, sqft=5117, lot_size=10846, year_built=2024, zip_code=75033)
