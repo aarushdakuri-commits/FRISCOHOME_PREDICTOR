@@ -16,6 +16,10 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import TweedieRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 
+import streamlit as st
+
+st.title("Frisco House Price Predictor")
+
 # 1. Load and Clean Data
 df = pd.read_csv('frisco_houses.csv')
 df = df.drop(0) # Remove the header/disclaimer row
@@ -100,6 +104,24 @@ def predict_house_price(beds, baths, sqft, lot_size, year_built, zip_code):
     if st.button("Predict Price"):
         price = predict_house_price(beds, baths, sqft, ...)
         st.success(f"The estimated price is: ${price:,.2f}")
+
+# 1. Create the input fields
+# These create the boxes where people can "paste" their own data
+beds = st.number_input("Number of Beds", min_value=1, value=4)
+baths = st.number_input("Number of Baths", min_value=1, value=3)
+sqft = st.number_input("Square Footage", min_value=500, value=2500)
+lot_size = st.number_input("Lot Size (sqft)", min_value=1000, value=5000)
+year_built = st.number_input("Year Built", min_value=1900, value=2020)
+zip_code = st.text_input("Zip Code", value="75033")
+
+# 2. Add a button to trigger the prediction
+if st.button("Calculate Estimated Price"):
+    # Call your prediction function here
+    prediction = predict_house_price(beds, baths, sqft, lot_size, year_built, zip_code)
+    
+    # 3. Show the result
+    st.subheader(f"Estimated Price: ${prediction:,.2f}")
+    st.balloons() # Just for fun!
 
 
 # Example Usage:
