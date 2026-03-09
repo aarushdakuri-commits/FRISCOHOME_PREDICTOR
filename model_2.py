@@ -18,7 +18,6 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 import streamlit as st
 
-st.title("Frisco House Price Predictor")
 
 # 1. Load and Clean Data
 df = pd.read_csv('frisco_houses.csv')
